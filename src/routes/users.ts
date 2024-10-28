@@ -1,9 +1,8 @@
 import { Router } from "express";
+import { listUsers } from "../controllers/user";
 
 const userRouter = Router();
 
-userRouter.get("/", (_req, res) => {
-  res.json("Users");
-});
+userRouter.get("/", listUsers);
 
 export { userRouter };
