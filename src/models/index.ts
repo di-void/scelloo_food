@@ -98,6 +98,14 @@ export const Order = sequelize.define(
     totalPrice: {
       type: DataTypes.DECIMAL,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
     //   timestamps included by default
   },
   { tableName: "orders", underscored: true }
