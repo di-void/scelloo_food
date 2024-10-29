@@ -156,6 +156,7 @@ User.hasMany(Order, { onDelete: "CASCADE", foreignKey: { allowNull: false } });
 Food.belongsTo(Category, {
   onDelete: "CASCADE",
   foreignKey: { allowNull: false },
+  as: "category",
 }); // a food item belongs to a single category
 Category.hasMany(Food, {
   onDelete: "CASCADE",
