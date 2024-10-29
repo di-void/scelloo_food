@@ -158,7 +158,7 @@ export async function updateOrderStatus(req: Request, res: Response) {
 
     if (currentStatus === status) {
       // no need to hit db
-      // fake successful update for idempotency sake
+      // idempotent mutation
       res.status(200).json({
         message: "success",
         data: { msg: "Order status updated successfully." },
@@ -177,7 +177,7 @@ export async function updateOrderStatus(req: Request, res: Response) {
     // update order fr
     const [nRows] = await Order.update({ status }, { where: { id: orderId } });
 
-    // no rows updated?
+    // no rows affected?
     if (nRows === 0) {
       res
         .status(500)
@@ -197,5 +197,46 @@ export async function updateOrderStatus(req: Request, res: Response) {
 }
 
 export async function deleteOrder(req: Request, res: Response) {
-  //
+  // validate input
+  const result = OrderParams.safeParse(req.params);
+
+  if (!result.success) {
+    res
+      .status(400)
+      .json({ message: "error", error: formatZodError(result.error) });
+    return;
+  }
+
+  const { orderId } = result.data;
+
+  try {
+    // does the order exist?
+    const order = (await Order.findByPk(orderId, {
+      attributes: ["id", "status", "total_price"],
+    })) as unknown as OrderType;
+
+    if (order === null) {
+      res.status(404).json({ message: "error", error: "Order not found." });
+      return;
+    }
+
+    // do work
+    const nRows = await Order.destroy({ where: { id: orderId } });
+
+    if (nRows === 0) {
+      res
+        .status(500)
+        .json({ message: "error", error: "Could not delete Order." });
+      return;
+    }
+
+    res.status(200).json({
+      message: "success",
+      data: { msg: "Order deleted successfully." },
+    });
+  } catch (error) {
+    console.error("DeleteOrder:", error);
+
+    res.status(500).json({ message: "error", error: "Something went wrong." });
+  }
 }
