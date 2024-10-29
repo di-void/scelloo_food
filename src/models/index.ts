@@ -98,7 +98,7 @@ export const Order = sequelize.define(
     totalPrice: {
       type: DataTypes.DECIMAL,
     },
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

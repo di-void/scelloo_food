@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { createOrder, listOrders } from "../controllers/report";
+import { validateOrder } from "../middleware/user";
 
 const orderRouter = Router();
 
-orderRouter.get("/", (_req, res) => {
-  res.json("Orders");
-});
+orderRouter.get("/", listOrders);
+orderRouter.post("/", validateOrder, createOrder);
 
 export { orderRouter };
