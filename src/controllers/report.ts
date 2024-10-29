@@ -154,7 +154,6 @@ export async function updateOrderStatus(req: Request, res: Response) {
       return;
     }
 
-    // is the order still pending?
     const currentStatus = order.status;
 
     if (currentStatus === status) {
@@ -167,6 +166,7 @@ export async function updateOrderStatus(req: Request, res: Response) {
       return;
     }
 
+    // is the order still pending?
     if (currentStatus !== "pending") {
       res
         .status(400)
@@ -174,8 +174,10 @@ export async function updateOrderStatus(req: Request, res: Response) {
       return;
     }
 
+    // update order fr
     const [nRows] = await Order.update({ status }, { where: { id: orderId } });
 
+    // no rows updated?
     if (nRows === 0) {
       res
         .status(500)
