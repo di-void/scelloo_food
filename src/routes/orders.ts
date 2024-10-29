@@ -4,7 +4,7 @@ import {
   deleteOrder,
   listOrders,
   updateOrderStatus,
-} from "../controllers/report";
+} from "../controllers/order";
 import { validateOrder } from "../middleware/user";
 
 const orderRouter = Router();
