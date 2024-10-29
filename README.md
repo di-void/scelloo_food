@@ -72,18 +72,18 @@ You will need the following tools installed on your computer to run the project.
 
 5. Database migration and seeding
 
-   > [!NOTE]
-   > This command will seed the database with test food items, categories and a demo user.
+> [!NOTE]
+> This command will seed the database with test food items, categories and a demo user.
 
-   ```bash
-   npm run db:seed
-   ```
+```bash
+npm run db:seed
+```
 
-   You can also undo the seeding by passing the `undo` argument to the command.
+You can also undo the seeding by passing the `undo` argument to the command.
 
-   ```bash
-   npm run db:seed undo
-   ```
+```bash
+npm run db:seed undo
+```
 
 ### Running the Application
 
