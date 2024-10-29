@@ -11,7 +11,7 @@ export async function listUsers(_req: Request, res: Response) {
     // return list
     res.status(200).json({ message: "success", data: users });
   } catch (error) {
-    console.error("ListUsers(Model):", error);
+    console.error("ListUsers:", error);
 
     res.status(500).json({ message: "error", error: "something went wrong" });
   }
@@ -48,7 +48,7 @@ export async function createUser(req: Request, res: Response) {
           .json({ message: "error", error: "Email already exists" });
       }
     } else {
-      console.error("CreateUser(Model):", error);
+      console.error("CreateUser:", error);
 
       res.status(500).json({ message: "error", error: "something went wrong" });
     }
@@ -93,7 +93,7 @@ export async function deleteUser(req: Request, res: Response) {
       data: { msg: "User deleted successfully." },
     });
   } catch (error) {
-    console.log("DeleteUser(Model):", error);
+    console.log("DeleteUser:", error);
 
     res.status(500).json({ message: "error", error: "Something went wrong." });
   }
