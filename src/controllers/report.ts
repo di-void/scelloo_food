@@ -4,7 +4,7 @@ import { db } from "../db";
 import { Food, Order } from "../models";
 
 // assuming day starts at midnight
-export async function generateOrderReport(req: Request, res: Response) {
+export async function generateOrderReport(_req: Request, res: Response) {
   // get current date
   const now = new Date();
 
