@@ -164,4 +164,4 @@ Category.hasMany(Food, {
 
 // pivot table for order/food
 Food.belongsToMany(Order, { through: FoodOrders });
-Order.belongsToMany(Food, { through: FoodOrders });
+Order.belongsToMany(Food, { through: FoodOrders, as: "foods" });
