@@ -1,10 +1,17 @@
 import { Router } from "express";
-import { createOrder, listOrders } from "../controllers/report";
+import {
+  createOrder,
+  deleteOrder,
+  listOrders,
+  updateOrderStatus,
+} from "../controllers/report";
 import { validateOrder } from "../middleware/user";
 
 const orderRouter = Router();
 
 orderRouter.get("/", listOrders);
 orderRouter.post("/", validateOrder, createOrder);
+orderRouter.patch("/:orderId", updateOrderStatus);
+orderRouter.delete("/:orderId", deleteOrder);
 
 export { orderRouter };

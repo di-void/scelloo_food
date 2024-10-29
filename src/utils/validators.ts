@@ -70,3 +70,13 @@ export const Order = z.object({
   updatedAt: z.date().optional(),
 });
 export type OrderType = z.infer<typeof Order>;
+
+export const OrderStatusInput = z.object({
+  status: OrderStatus,
+});
+export type OrderStatusInputType = z.infer<typeof OrderStatusInput>;
+
+export const OrderParams = z.object({
+  orderId: z.string().uuid(),
+});
+export type OrderParamsType = z.infer<typeof OrderParams>;

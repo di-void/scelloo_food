@@ -3,6 +3,9 @@ import { Food, FoodOrders, Order } from "../models";
 import {
   OrderInput,
   OrderInputType,
+  OrderParams,
+  OrderStatusInput,
+  OrderType,
   Order as OrderValidator,
 } from "../utils/validators";
 import { formatZodError } from "../utils/helpers";
@@ -111,4 +114,86 @@ export async function createOrder(req: Request, res: Response) {
 
     res.status(500).json({ message: "error", error: "Something went wrong." });
   }
+}
+
+export async function updateOrderStatus(req: Request, res: Response) {
+  // parse input body
+  const result = OrderStatusInput.safeParse(req.body);
+
+  if (!result.success) {
+    res
+      .status(400)
+      .json({ message: "error", error: formatZodError(result.error) });
+    return;
+  }
+
+  const { status } = result.data;
+
+  // validate for order id
+  const paramsResult = OrderParams.safeParse(req.params);
+
+  if (!paramsResult.success) {
+    res
+      .status(400)
+      .json({ message: "error", error: formatZodError(paramsResult.error) });
+    return;
+  }
+
+  const { orderId } = paramsResult.data;
+
+  // do work
+
+  try {
+    // does the order exist?
+    const order = (await Order.findByPk(orderId, {
+      attributes: ["id", "status", "total_price"],
+    })) as unknown as OrderType;
+
+    if (order === null) {
+      res.status(404).json({ message: "error", error: "Order not found." });
+      return;
+    }
+
+    // is the order still pending?
+    const currentStatus = order.status;
+
+    if (currentStatus === status) {
+      // no need to hit db
+      // fake successful update for idempotency sake
+      res.status(200).json({
+        message: "success",
+        data: { msg: "Order status updated successfully." },
+      });
+      return;
+    }
+
+    if (currentStatus !== "pending") {
+      res
+        .status(400)
+        .json({ message: "error", error: "Cannot update non-pending order" });
+      return;
+    }
+
+    const [nRows] = await Order.update({ status }, { where: { id: orderId } });
+
+    if (nRows === 0) {
+      res
+        .status(500)
+        .json({ message: "error", error: "Could not update Order Status." });
+      return;
+    }
+
+    res.status(200).json({
+      message: "success",
+      data: { msg: "Order status updated successfully." },
+    });
+  } catch (error) {
+    console.error("UpdateOrder:", error);
+
+    res.status(500).json({ message: "error", error: "Something went wrong." });
+  }
+}
+
+export async function deleteOrder(req: Request, res: Response) {
+  //
 }

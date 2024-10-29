@@ -3,7 +3,6 @@ import { OrderInput } from "../utils/validators";
 import { formatZodError } from "../utils/helpers";
 import { db } from "../db";
 import { Food, User } from "../models";
-import { Op } from "sequelize";
 
 export async function validateOrder(
   req: Request,
